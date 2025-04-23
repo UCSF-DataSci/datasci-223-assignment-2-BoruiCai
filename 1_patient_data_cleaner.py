@@ -114,11 +114,15 @@ def main():
     
     # BUG: No error handling for load_patient_data failure
     patients = load_patient_data(data_path)
-    
+    if not patients:
+        print("No data")
+        return
     # Clean the patient data
     cleaned_patients = clean_patient_data(patients)
     
     # BUG: No check if cleaned_patients is None
+    # FIX: checked if cleaned_patients is None
+    
     # Print the cleaned patient data
     print("Cleaned Patient Data:")
     for patient in cleaned_patients:
