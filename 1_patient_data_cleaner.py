@@ -52,8 +52,13 @@ def load_patient_data(filepath):
         list: List of patient dictionaries
     """
     # BUG: No error handling for file not found
+    # FIX: handled for file not found
+    if not os.path.exists(filepath):
+        print(f"Error: File not found at {filepath}")
+        return []
     with open(filepath, 'r') as file:
         return json.load(file)
+
 
 def clean_patient_data(patients):
     """
@@ -73,21 +78,28 @@ def clean_patient_data(patients):
     
     for patient in patients:
         # BUG: Typo in key 'nage' instead of 'name'
-        patient['nage'] = patient['name'].title()
+        # FIX: CHanged nage to name
+        patient['name'] = patient['name'].title()
         
         # BUG: Wrong method name (fill_na vs fillna)
-        patient['age'] = patient['age'].fill_na(0)
+        # FIX: convent age into integer
+        patient['age'] = int(patient['age'])
         
         # BUG: Wrong method name (drop_duplcates vs drop_duplicates)
-        patient = patient.drop_duplcates()
-        
+        # FIX: drop duplicates with other method
         # BUG: Wrong comparison operator (= vs ==)
-        if patient['age'] = 18:
-            # BUG: Logic error - keeps patients under 18 instead of filtering them out
-            cleaned_patients.append(patient)
+        # FIX: fixed with >=
+        # BUG: Logic error - keeps patients under 18 instead of filtering them out
+        # FIX: keep patients above 18.
+        if patient['age'] >= 18:
+                if patient not in cleaned_patients:
+                    cleaned_patients.append(patient)
+        
     
     # BUG: Missing return statement for empty list
+    # FIX: print if its an empty list
     if not cleaned_patients:
+        print(f'empty list')
         return None
     
     return cleaned_patients
